@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gc.mapper.EmployeeMapper">
+
+  <resultMap id="employeeResultMap" type="com.gc.entity.Employee">
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="create_user" property="createUser" />
+    <result column="update_user" property="updateUser" />
+    <result column="id_number" property="idNumber" />
+  </resultMap>
+
+  <!--Employee getEmpByUsername(@Param("username") String username);-->
+  <select id="getEmpByUsername" resultMap="employeeResultMap">
+    select id,
+           name,
+           username,
+           password,
+           phone,
+           sex,
+           id_number,
+           status,
+           create_time,
+           update_time,
+           create_user,
+           update_user
+    from employee
+    where username = #{username}
+  </select>
+
+  <insert id="save">
+    insert into employee(name, username, password, phone, sex, id_number, create_time, update_time, create_user,
+    update_user)
+    values (#{name}, #{username}, #{password}, #{phone}, #{sex}, #{idNumber}, #{createTime},
+    #{updateTime},#{createUser}, #{updateUser})
+  </insert>
+
+  <select id="page" resultMap="employeeResultMap">
+    select id, name, username, password, phone, sex, id_number, status, create_time, update_time, create_user, update_user
+    from employee
+    <where>
+      <if test="name != '' and name != null">
+        name = #{name}
+      </if>
+    </where>
+  </select>
+
+  <!--注意:只有string才能去比较''-->
+  <update id="update">
+    update employee
+    <set>
+      <if test="username != '' and username != null">
+        username = #{username},
+      </if>
+      <if test="name != '' and name != null">
+        name = #{name},
+      </if>
+      <if test="password != '' and password != null">
+        password = #{password},
+      </if>
+      <if test="phone != '' and phone != null">
+        phone = #{phone},
+      </if>
+      <if test="sex != '' and sex != null">
+        sex = #{sex},
+      </if>
+      <if test="idNumber != '' and idNumber != null">
+        id_number = #{idNumber},
+      </if>
+      <if test="status != null">
+        status = #{status},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser}
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <select id="getById" resultMap="employeeResultMap">
+    select id,
+           name,
+           username,
+           password,
+           phone,
+           sex,
+           id_number,
+           status,
+           create_time,
+           update_time,
+           create_user,
+           update_user
+    from employee
+    where id = #{id}
+  </select>
+</mapper>
